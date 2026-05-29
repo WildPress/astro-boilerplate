@@ -17,7 +17,7 @@ This repository is the reusable Astro boilerplate for new static builds. Treat i
 - Do not use raw `<img>` elements in Astro components or pages unless the standards verifier has been deliberately updated for a documented exception.
 - Do not add React by default. If a project needs a React-only dependency, document the reason and update the dependency allowlist deliberately.
 - Run `npm run validate` after code changes where practical.
-- Do not run Bunny deployments from this boilerplate repository. Bunny deployment support is provided for downstream projects only; configuration is documented in `docs/deployment.md`.
+- Do not run Bunny deployments from this boilerplate repository. Bunny deployment support is provided for downstream projects only; local `.env` and GitHub Actions configuration are documented in `docs/deployment.md`.
 - Use conventional commits when committing, and keep commits atomic. Each commit should cover one coherent change.
 
 ## Boilerplate Contract

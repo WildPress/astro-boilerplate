@@ -13,7 +13,7 @@
     "validate": "npm run verify:standards && npm run lint && npm run build",
     "build": "npm run verify:standards && astro build",
     "postbuild": "pagefind --site dist",
-    "deploy:bunny": "node scripts/bunny-deploy.mjs",
+    "deploy:bunny": "node --env-file-if-exists=.env scripts/bunny-deploy.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },

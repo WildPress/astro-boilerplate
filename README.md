@@ -42,7 +42,7 @@ npm run preview
 
 `npm run validate` runs standards verification, ESLint, and the production build.
 
-Bunny deployment is available for downstream projects:
+Bunny deployment is available for downstream projects, either locally with `.env` or through the manual GitHub Actions workflow:
 
 ```bash
 npm run deploy:bunny

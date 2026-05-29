@@ -1,0 +1,27 @@
+name: Deploy Bunny
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run validate
+      - run: npm run deploy:bunny
+        env:
+          BUNNY_STORAGE_ENDPOINT: ${{ secrets.BUNNY_STORAGE_ENDPOINT }}
+          BUNNY_STORAGE_ZONE_NAME: ${{ secrets.BUNNY_STORAGE_ZONE_NAME }}
+          BUNNY_STORAGE_ACCESS_KEY: ${{ secrets.BUNNY_STORAGE_ACCESS_KEY }}
+          BUNNY_API_KEY: ${{ secrets.BUNNY_API_KEY }}
+          BUNNY_PULL_ZONE_ID: ${{ secrets.BUNNY_PULL_ZONE_ID }}
+          BUNNY_PURGE_MODE: ${{ vars.BUNNY_PURGE_MODE || 'full' }}
+          BUNNY_PUBLIC_BASE_URL: ${{ vars.BUNNY_PUBLIC_BASE_URL }}
+          BUNNY_PURGE_URLS: ${{ vars.BUNNY_PURGE_URLS }}
+          BUNNY_CLEAN_DEPLOY: ${{ vars.BUNNY_CLEAN_DEPLOY || 'false' }}

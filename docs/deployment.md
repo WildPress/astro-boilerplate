@@ -10,9 +10,22 @@ Script:
 npm run deploy:bunny
 ```
 
-The script syncs `dist/` to a Bunny Storage Zone with the Bunny Storage HTTP API, deletes stale remote files, and can optionally purge Bunny CDN cache.
+The script syncs `dist/` to a Bunny Storage Zone with the Bunny Storage HTTP API, deletes stale remote files, and can optionally purge Bunny CDN cache. The same npm script is used locally and by GitHub Actions.
 
 Do not run deployments from this boilerplate repo. Configure and run deployment only in a project created from the boilerplate.
+
+## Local Deployment
+
+1. Copy `.env.example` to `.env` in the real project repo.
+2. Fill in the Bunny values.
+3. Run:
+
+```bash
+npm run validate
+npm run deploy:bunny
+```
+
+`npm run deploy:bunny` uses Node's `--env-file-if-exists=.env`, so local `.env` values are loaded automatically when present.
 
 ## Required Environment Variables
 
@@ -43,4 +56,22 @@ Do not run deployments from this boilerplate repo. Configure and run deployment 
 
 ## GitHub Actions
 
-This boilerplate only includes validation CI. Add a deploy workflow in project repos when deployment credentials and branch rules are known.
+`.github/workflows/deploy-bunny.yml` runs the same `npm run deploy:bunny` script through a manual `workflow_dispatch` trigger.
+
+Required GitHub secrets:
+
+- `BUNNY_STORAGE_ENDPOINT`
+- `BUNNY_STORAGE_ZONE_NAME`
+- `BUNNY_STORAGE_ACCESS_KEY`
+
+Optional GitHub secrets:
+
+- `BUNNY_API_KEY`
+- `BUNNY_PULL_ZONE_ID`
+
+Optional GitHub variables:
+
+- `BUNNY_PURGE_MODE`
+- `BUNNY_PUBLIC_BASE_URL`
+- `BUNNY_PURGE_URLS`
+- `BUNNY_CLEAN_DEPLOY`

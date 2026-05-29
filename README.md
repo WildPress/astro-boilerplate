@@ -1,91 +1,71 @@
 # Astro Boilerplate
 
-Strict Astro starter for new static site builds. It combines reusable primitives with a verification process designed to prevent drift across new Astro projects.
+A strict starter for new Astro static sites. It includes a small set of reusable components, Tailwind CSS, Preact islands, image optimisation, validation scripts, and optional Bunny.net deployment support.
 
-## Stack
+## What's Included
 
 - Astro 6
-- Preact islands by default
-- Tailwind CSS 4
-- `@floating-ui/dom` for popovers, menus, and positioned UI
-- Swiper for carousels
-- Lucide icon nodes through the shared `Icon.astro` component
-- Pagefind for static search indexing
-- Sitemap integration
-- Fontsource for local font loading
-- Astro native image optimization through `astro:assets`
+- Tailwind CSS 4 with Tailwind Typography
+- Preact for interactive islands
+- Shared components for layout, buttons, cards, typography, icons, and images
+- Astro native image optimisation through `OptimizedImage.astro`
+- Pagefind search indexing after build
+- Sitemap generation
+- ESLint and project standards verification
+- Optional Bunny.net deployment script
 
-React is intentionally not part of the default stack. Add it only for a project that has a clear React-only requirement.
-
-## Commands
+## Getting Started
 
 ```bash
 npm install
 npm run dev
+```
+
+Update these first for a real project:
+
+- `package.json` project name
+- `astro.config.mjs` site URL
+- `src/components/SiteHeader.astro`
+- `src/components/Footer.astro`
+- `src/pages/index.astro`
+- `public/favicon.svg`
+- Theme choices in `src/styles/global.css`
+
+## Commands
+
+```bash
+npm run dev
 npm run validate
+npm run build
 npm run preview
 ```
 
-`npm run validate` is the build gate for every project:
+`npm run validate` runs standards verification, ESLint, and the production build.
 
-1. `npm run verify:standards`
-2. `npm run lint`
-3. `npm run build`
+Bunny deployment is available for downstream projects:
 
-`npm run build` also runs `verify:standards` before `astro build`.
+```bash
+npm run deploy:bunny
+```
 
-## Component Rules
+Configure it only in the project repo that will actually deploy. See [docs/deployment.md](docs/deployment.md).
 
-Reusable components live in `src/components/`.
+## Documentation
 
-- `Button.astro` for links and buttons with strict variants.
-- `Card.astro` for repeated items, modals, or genuinely framed content.
-- `Section.astro` for full-width page bands and consistent spacing.
-- `Typography.astro` for display, heading, title, body, meta, and label text.
-- `Icon.astro` for approved Lucide icons.
-- `SiteHeader.astro` and `Footer.astro` are replaceable project shells.
-- `OptimizedImage.astro` wraps Astro's native `<Image />` and defaults to `format="webp"` and `quality="high"`.
+- [Component reference](docs/components.md)
+- [Theme setup](docs/theme.md)
+- [MCP setup](docs/mcp.md)
+- [Deployment setup](docs/deployment.md)
+- [Agent instructions](AGENTS.md)
 
-Rules:
+Component examples live in `src/examples/components/`. They are outside `src/pages/`, so they are not routed or deployed unless you import them into a preview route during development.
 
-- Use Tailwind utility classes for styling.
-- No component-scoped `<style>` blocks.
-- No inline `style` attributes.
-- No CSS files outside `src/styles/global.css`.
-- No raw `<img>` elements in Astro files. Use `OptimizedImage.astro`, or Astro's native `Image`/`Picture` components for documented exceptions.
-- Use `class:list` for conditional Astro classes.
-- Avoid template-generated class strings.
-- Keep component APIs narrow and reusable.
+## Before Shipping
 
-Full component options, goals, attributes, and examples live in `docs/components.md` and the per-component files under `docs/components/`.
+Run:
 
-## Global CSS Policy
+```bash
+npm run validate
+```
 
-`src/styles/global.css` is allowed to contain:
-
-- Tailwind imports and plugins
-- `@theme` design tokens
-- `:root` token aliases
-- Base element defaults
-- Shared primitives such as `.shell`, `.card`, `.type-*`, `.field`, and `.eyebrow`
-
-Do not place one-off page styling in global CSS. Use Tailwind classes in the page or component.
-
-## Creating A New Site From This Boilerplate
-
-1. Copy or fork the boilerplate.
-2. Update `package.json` name and `astro.config.mjs` site URL.
-3. Replace header, footer, homepage content, fonts, colours, and favicon.
-4. Keep the component and verification contracts intact.
-5. Run `npm run validate` before first commit.
-
-## Verification Checklist
-
-Before shipping any build:
-
-- `npm run validate` passes.
-- There are no component `<style>` blocks or inline styles.
-- Global CSS contains only tokens, base rules, and shared primitives.
-- Components use Tailwind classes and stable responsive dimensions.
-- New interactive UI uses Preact islands unless React is explicitly approved.
-- Pages have title and description metadata.
+Keep the output clean before committing or deploying a site built from this boilerplate.

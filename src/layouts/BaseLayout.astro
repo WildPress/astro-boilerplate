@@ -1,10 +1,4 @@
 ---
-import '@fontsource/inter/latin-400.css';
-import '@fontsource/inter/latin-600.css';
-import '@fontsource/inter/latin-700.css';
-import '@fontsource/newsreader/latin-500.css';
-import interUrl from '@fontsource/inter/files/inter-latin-400-normal.woff2?url';
-import newsreaderUrl from '@fontsource/newsreader/files/newsreader-latin-500-normal.woff2?url';
 import Footer from '../components/Footer.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import '../styles/global.css';
@@ -39,8 +33,6 @@ const {
     <meta property="og:url" content={Astro.url.href} />
     <meta name="twitter:card" content="summary_large_image" />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
-    <link rel="preload" as="font" type="font/woff2" href={interUrl} crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href={newsreaderUrl} crossorigin />
     <slot name="head" />
   </head>
   <body>

@@ -37,6 +37,8 @@ Use `Typography` for headings, labels, supporting copy, metadata, and repeated t
 
 ## Rules
 
+- Define typography roles as Tailwind class strings in `Typography.astro`.
+- Use responsive Tailwind utilities such as `text-5xl sm:text-7xl`, not custom text-size CSS variables.
 - Do not use `display` inside cards or compact panels.
 - Keep letter spacing at zero unless a project type system deliberately changes it.
 - Use `as` for semantics and `variant` for visual role.

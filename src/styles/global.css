@@ -1,60 +1,6 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-@theme {
-  --font-serif: 'Newsreader', Georgia, serif;
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --spacing-button-default: 2.75rem;
-  --spacing-button-large: 3.5rem;
-  --radius-button: 4px;
-  --radius-card: 8px;
-  --color-brand: #25636f;
-  --color-brand-strong: #132f38;
-  --color-accent: #b48b3d;
-  --color-accent-strong: #87631f;
-  --color-accent-soft: #f3ead7;
-  --color-ink: #182025;
-  --color-ink-2: #354148;
-  --color-muted: #647179;
-  --color-paper: #f6f7f5;
-  --color-panel: #ffffff;
-  --color-line: #dce2df;
-  --text-display-mobile: 2.75rem;
-  --text-display-mobile--line-height: 3.05rem;
-  --text-display-desktop: 4.75rem;
-  --text-display-desktop--line-height: 4.9rem;
-  --text-heading-mobile: 2rem;
-  --text-heading-mobile--line-height: 2.35rem;
-  --text-heading-desktop: 3rem;
-  --text-heading-desktop--line-height: 3.25rem;
-  --text-title-mobile: 1.375rem;
-  --text-title-mobile--line-height: 1.75rem;
-  --text-title-desktop: 1.625rem;
-  --text-title-desktop--line-height: 2rem;
-  --text-body: 1rem;
-  --text-body--line-height: 1.7rem;
-  --text-meta: 0.875rem;
-  --text-meta--line-height: 1.375rem;
-  --text-label: 0.75rem;
-  --text-label--line-height: 1rem;
-  --text-button: 0.75rem;
-  --text-button--line-height: 1;
-}
-
-:root {
-  --brand: var(--color-brand);
-  --brand-strong: var(--color-brand-strong);
-  --accent: var(--color-accent);
-  --accent-strong: var(--color-accent-strong);
-  --accent-soft: var(--color-accent-soft);
-  --ink: var(--color-ink);
-  --ink-2: var(--color-ink-2);
-  --muted: var(--color-muted);
-  --paper: var(--color-paper);
-  --panel: var(--color-panel);
-  --line: var(--color-line);
-}
-
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -63,9 +9,7 @@
 
   body {
     min-height: 100vh;
-    background: var(--paper);
-    color: var(--ink);
-    @apply font-sans;
+    @apply bg-white font-sans text-neutral-950;
   }
 
   h1,
@@ -91,8 +35,7 @@
   }
 
   ::selection {
-    background: var(--accent-soft);
-    color: var(--ink);
+    @apply bg-neutral-200 text-neutral-950;
   }
 }
 
@@ -102,62 +45,15 @@
   }
 
   .card {
-    @apply border bg-[var(--panel)] shadow-sm transition-colors duration-200;
-    border-color: var(--line);
+    @apply border border-neutral-200 bg-white shadow-sm transition-colors duration-200;
   }
 
   .card:hover {
-    border-color: color-mix(in srgb, var(--accent) 70%, var(--line));
+    @apply border-neutral-400;
   }
 
   .eyebrow {
-    @apply mb-4 inline-flex items-center gap-2 rounded-[4px] border px-3 py-1 text-label font-bold uppercase;
-    border-color: color-mix(in srgb, var(--accent) 36%, var(--line));
-    background: var(--accent-soft);
-    color: var(--accent-strong);
-    letter-spacing: 0;
-  }
-
-  .type-display {
-    @apply text-display-mobile font-serif sm:text-display-desktop;
-    color: var(--ink);
-    font-weight: 500;
-    letter-spacing: 0;
-  }
-
-  .type-heading {
-    @apply text-heading-mobile font-serif sm:text-heading-desktop;
-    color: var(--ink);
-    font-weight: 500;
-    letter-spacing: 0;
-  }
-
-  .type-title {
-    @apply text-title-mobile font-serif sm:text-title-desktop;
-    color: var(--ink);
-    font-weight: 500;
-    letter-spacing: 0;
-  }
-
-  .type-body {
-    @apply text-body font-sans;
-    color: var(--muted);
-  }
-
-  .type-meta {
-    @apply text-meta font-sans;
-    color: var(--muted);
-  }
-
-  .type-label {
-    @apply text-label font-bold uppercase;
-    color: var(--accent-strong);
-    letter-spacing: 0;
-  }
-
-  .type-button {
-    @apply text-button font-bold uppercase;
-    letter-spacing: 0;
+    @apply mb-4 inline-flex items-center gap-2 rounded border border-neutral-300 bg-neutral-100 px-3 py-1 text-xs font-bold uppercase tracking-normal text-neutral-700;
   }
 
   .field {
@@ -165,22 +61,18 @@
   }
 
   .field label {
-    @apply text-sm font-bold;
-    color: var(--ink);
+    @apply text-sm font-bold text-neutral-950;
   }
 
   .field input,
   .field textarea,
   .field select {
-    @apply min-h-12 w-full rounded-[4px] border bg-white px-4 py-3 text-base outline-none transition-[border-color,box-shadow];
-    border-color: var(--line);
-    color: var(--ink);
+    @apply min-h-12 w-full rounded border border-neutral-300 bg-white px-4 py-3 text-base text-neutral-950 outline-none transition-[border-color,box-shadow];
   }
 
   .field input:focus,
   .field textarea:focus,
   .field select:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-soft) 80%, transparent);
+    @apply border-neutral-950 shadow-[0_0_0_3px_rgba(23,23,23,0.12)];
   }
 }

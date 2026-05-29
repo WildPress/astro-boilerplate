@@ -1,0 +1,21 @@
+---
+import Section from '../../components/Section.astro';
+import Typography from '../../components/Typography.astro';
+---
+
+<div class="grid gap-4">
+  <Section background="white" top="sm" bottom="sm" border={true}>
+    <Typography as="h3" variant="title">White Section</Typography>
+    <Typography variant="meta">Small spacing with top and bottom borders.</Typography>
+  </Section>
+
+  <Section background="paper" top="md" bottom="md">
+    <Typography as="h3" variant="title">Paper Section</Typography>
+    <Typography variant="meta">Neutral alternate page band.</Typography>
+  </Section>
+
+  <Section background="dark" top="lg" bottom="lg">
+    <Typography as="h3" variant="title" class="text-white">Dark Section</Typography>
+    <Typography variant="meta" class="text-white/70">Light text composition for dark contexts.</Typography>
+  </Section>
+</div>

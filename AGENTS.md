@@ -10,11 +10,14 @@ This repository is the reusable Astro boilerplate for new static builds. Treat i
 - Use Tailwind utility classes for page and component styling.
 - Do not add component-level `<style>` blocks or inline `style` attributes.
 - Keep custom CSS restricted to `src/styles/global.css`, and use it only for Tailwind setup, design tokens, base element rules, and shared primitives.
+- Do not hardcode a finished project colour palette into the boilerplate. Define project palettes deliberately using the process in `docs/theme.md`.
+- Define custom typography roles with Tailwind class maps in components, not custom text-size CSS variables.
 - Prefer Astro components for static UI and Preact islands only where client interactivity is required.
 - Use Astro's native image pipeline. Prefer `OptimizedImage.astro`, which wraps `astro:assets` `<Image />` and defaults to WebP with `quality="high"`.
 - Do not use raw `<img>` elements in Astro components or pages unless the standards verifier has been deliberately updated for a documented exception.
 - Do not add React by default. If a project needs a React-only dependency, document the reason and update the dependency allowlist deliberately.
 - Run `npm run validate` after code changes where practical.
+- Do not run Bunny deployments from this boilerplate repository. Bunny deployment support is provided for downstream projects only; configuration is documented in `docs/deployment.md`.
 - Use conventional commits when committing, and keep commits atomic. Each commit should cover one coherent change.
 
 ## Boilerplate Contract
@@ -41,7 +44,7 @@ Default approved dependencies are:
 - `swiper`
 - `lucide`
 - `pagefind`
-- `@fontsource/inter` and `@fontsource/newsreader`
+- Bunny deployment script via Node fetch, with no extra package dependency
 
 Any dependency outside the allowlist must be justified in README and added to `scripts/verify-standards.mjs`.
 

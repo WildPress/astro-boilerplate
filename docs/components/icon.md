@@ -48,5 +48,5 @@ Approved names:
 ## Example
 
 ```astro
-<Icon name="search" size="md" class="text-[var(--accent-strong)]" />
+<Icon name="search" size="md" class="text-neutral-700" />
 ```

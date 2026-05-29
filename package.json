@@ -13,6 +13,7 @@
     "validate": "npm run verify:standards && npm run lint && npm run build",
     "build": "npm run verify:standards && astro build",
     "postbuild": "pagefind --site dist",
+    "deploy:bunny": "node scripts/bunny-deploy.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -20,8 +21,6 @@
     "@astrojs/preact": "^5.0.0",
     "@astrojs/sitemap": "^3.7.3",
     "@floating-ui/dom": "^1.7.4",
-    "@fontsource/inter": "^5.2.8",
-    "@fontsource/newsreader": "^5.2.8",
     "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "4.2.2",
     "astro": "^6.4.2",

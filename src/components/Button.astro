@@ -28,25 +28,25 @@ const {
   class: className = '',
 } = Astro.props;
 
-const baseClass = 'type-button inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-button border transition-[border-color,background-color,color,box-shadow] duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]';
+const baseClass = 'inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded border text-xs font-bold uppercase tracking-normal transition-[border-color,background-color,color,box-shadow] duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950';
 const gapClass = variant === 'tertiary' ? 'gap-1' : 'gap-2';
 const sizeClass = size === 'large'
   ? variant === 'tertiary'
-    ? 'h-button-large'
-    : 'h-button-large min-w-[220px] px-8'
+    ? 'h-14'
+    : 'h-14 min-w-[220px] px-8'
   : variant === 'tertiary'
-    ? 'h-button-default'
-    : 'h-button-default min-w-[160px] px-6';
+    ? 'h-11'
+    : 'h-11 min-w-[160px] px-6';
 const variantClass =
   tone === 'light' && variant === 'primary'
-    ? 'border-white bg-white text-[var(--brand-strong)] hover:bg-[var(--accent-soft)]'
+    ? 'border-white bg-white text-neutral-950 hover:bg-neutral-100'
     : tone === 'light' && variant === 'secondary'
-      ? 'border-white/60 bg-transparent text-white hover:border-white hover:bg-white hover:text-[var(--brand-strong)]'
+      ? 'border-white/60 bg-transparent text-white hover:border-white hover:bg-white hover:text-neutral-950'
       : variant === 'primary'
-        ? 'border-[var(--brand-strong)] bg-[var(--brand-strong)] text-white shadow-sm hover:border-[var(--accent-strong)] hover:bg-[var(--accent-strong)]'
+        ? 'border-neutral-950 bg-neutral-950 text-white shadow-sm hover:border-neutral-700 hover:bg-neutral-700'
         : variant === 'secondary'
-          ? 'border-[var(--line)] bg-white text-[var(--brand-strong)] hover:border-[var(--accent)] hover:text-[var(--accent-strong)]'
-          : 'min-w-0 border-0 bg-transparent px-0 text-[var(--brand-strong)] hover:text-[var(--accent-strong)]';
+          ? 'border-neutral-300 bg-white text-neutral-950 hover:border-neutral-950'
+          : 'min-w-0 border-0 bg-transparent px-0 text-neutral-950 hover:text-neutral-600';
 const widthClass = fullWidth === true || fullWidth === 'true' ? 'flex w-full' : '';
 const iconSize = variant === 'tertiary' ? 'compact' : 'default';
 const iconName = icon === true ? 'move-right' : icon || undefined;

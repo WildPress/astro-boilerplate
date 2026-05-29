@@ -1,0 +1,21 @@
+---
+import Card from '../../components/Card.astro';
+import Typography from '../../components/Typography.astro';
+---
+
+<div class="grid gap-4 md:grid-cols-3">
+  <Card padded={true}>
+    <Typography as="h3" variant="title">Default Card</Typography>
+    <Typography variant="meta" class="mt-2">Bordered with standard padding.</Typography>
+  </Card>
+
+  <Card rounded={true} padded={true}>
+    <Typography as="h3" variant="title">Rounded Card</Typography>
+    <Typography variant="meta" class="mt-2">Rounded and clipped for media layouts.</Typography>
+  </Card>
+
+  <Card border={false} padded={true} class="bg-neutral-100">
+    <Typography as="h3" variant="title">Borderless Card</Typography>
+    <Typography variant="meta" class="mt-2">Useful inside already framed areas.</Typography>
+  </Card>
+</div>

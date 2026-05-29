@@ -61,6 +61,6 @@ import heroImage from '../assets/hero.jpg';
   src={heroImage}
   alt="Descriptive image text"
   loading="eager"
-  class="aspect-[16/9] w-full rounded-card object-cover"
+  class="aspect-[16/9] w-full rounded-lg object-cover"
 />
 ```

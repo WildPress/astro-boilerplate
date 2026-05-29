@@ -42,14 +42,14 @@ const bottomSpacing = {
 const backgroundClass = {
   transparent: '',
   white: 'bg-white',
-  paper: 'bg-[var(--paper)]',
-  dark: 'bg-[var(--brand-strong)] text-white',
+  paper: 'bg-neutral-50',
+  dark: 'bg-neutral-950 text-white',
 };
 
 const borderClasses: string[] = [];
-if (border) borderClasses.push('border-y border-[var(--line)]');
-if (borderTop) borderClasses.push('border-t border-[var(--line)]');
-if (borderBottom) borderClasses.push('border-b border-[var(--line)]');
+if (border) borderClasses.push('border-y border-neutral-200');
+if (borderTop) borderClasses.push('border-t border-neutral-200');
+if (borderBottom) borderClasses.push('border-b border-neutral-200');
 
 const shellClass = shell ? 'mx-auto w-full max-w-7xl' : '';
 const padXClass = disableXPadding ? '' : 'px-5 sm:px-8';

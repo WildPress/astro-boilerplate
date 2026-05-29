@@ -1,0 +1,21 @@
+---
+import Button from '../../components/Button.astro';
+---
+
+<div class="grid gap-6">
+  <div class="flex flex-wrap items-center gap-3">
+    <Button href="#primary">Primary</Button>
+    <Button href="#secondary" variant="secondary">Secondary</Button>
+    <Button href="#tertiary" variant="tertiary" icon={true}>Tertiary</Button>
+  </div>
+
+  <div class="flex flex-wrap items-center gap-3 bg-neutral-950 p-6">
+    <Button href="#light-primary" tone="light">Light Primary</Button>
+    <Button href="#light-secondary" variant="secondary" tone="light">Light Secondary</Button>
+  </div>
+
+  <div class="grid max-w-md gap-3">
+    <Button href="#large" size="large" icon="arrow-right">Large With Icon</Button>
+    <Button type="submit" fullWidth={true}>Full Width Submit</Button>
+  </div>
+</div>

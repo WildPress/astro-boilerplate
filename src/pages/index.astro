@@ -28,11 +28,11 @@ const standards = [
         </div>
       </div>
       <Card rounded={true} padded={true} class="border-white/20 bg-white/10 text-white shadow-none">
-        <Typography variant="label" class="text-[var(--accent-soft)]">Baseline</Typography>
+        <Typography variant="label" class="text-white/70">Baseline</Typography>
         <ul class="mt-5 grid gap-4 text-sm text-white/78">
           {standards.map((item) => (
             <li class="flex gap-3">
-              <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]"></span>
+              <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-white/70"></span>
               <span>{item}</span>
             </li>
           ))}
@@ -76,7 +76,7 @@ const standards = [
       {['npm run verify:standards', 'npm run lint', 'npm run build'].map((command) => (
         <Card rounded={true} padded={true}>
           <Typography variant="label">Required</Typography>
-          <code class="mt-3 block rounded-[4px] bg-[var(--brand-strong)] px-4 py-3 text-sm text-white">{command}</code>
+          <code class="mt-3 block rounded bg-neutral-950 px-4 py-3 text-sm text-white">{command}</code>
         </Card>
       ))}
     </div>

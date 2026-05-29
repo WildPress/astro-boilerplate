@@ -1,0 +1,21 @@
+---
+import OptimizedImage from '../../components/OptimizedImage.astro';
+---
+
+<div class="grid gap-4 md:grid-cols-2">
+  <OptimizedImage
+    src="/favicon.svg"
+    alt="Boilerplate favicon preview"
+    width={320}
+    height={320}
+    class="aspect-square w-full rounded-lg border border-neutral-200 bg-neutral-50 object-contain p-10"
+  />
+
+  <OptimizedImage
+    src="/favicon.svg"
+    alt=""
+    width={640}
+    height={360}
+    class="aspect-video w-full rounded-lg border border-neutral-200 bg-neutral-950 object-contain p-12"
+  />
+</div>

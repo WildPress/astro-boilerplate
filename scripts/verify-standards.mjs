@@ -8,8 +8,6 @@ const allowedDependencies = new Set([
   '@astrojs/preact',
   '@astrojs/sitemap',
   '@floating-ui/dom',
-  '@fontsource/inter',
-  '@fontsource/newsreader',
   '@tailwindcss/typography',
   '@tailwindcss/vite',
   'astro',
@@ -77,7 +75,7 @@ if (packageJson.engines?.node !== '24.x') {
 assertAllowedPackageEntries(packageJson, 'dependencies', allowedDependencies);
 assertAllowedPackageEntries(packageJson, 'devDependencies', allowedDevDependencies);
 
-for (const script of ['verify:standards', 'lint', 'validate', 'build']) {
+for (const script of ['verify:standards', 'lint', 'validate', 'build', 'deploy:bunny']) {
   if (!packageJson.scripts?.[script]) {
     fail('package.json', `missing required script "${script}"`);
   }

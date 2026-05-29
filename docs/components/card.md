@@ -16,7 +16,7 @@ Use `Card` for repeated items, result cards, feature tiles, callouts, modal pane
 | --- | --- | --- | --- | --- |
 | `as` | `keyof HTMLElementTagNameMap` | `'div'` | No | Semantic HTML element to render, such as `article`, `li`, or `aside`. |
 | `border` | `boolean \| 'true' \| 'false'` | `true` | No | Keeps or removes the default border. String support exists for content-driven usage. |
-| `rounded` | `boolean \| 'true' \| 'false'` | `false` | No | Applies `rounded-card` and `overflow-hidden`. |
+| `rounded` | `boolean \| 'true' \| 'false'` | `false` | No | Applies `rounded-lg` and `overflow-hidden`. |
 | `padded` | `boolean \| 'true' \| 'false'` | `false` | No | Applies standard internal padding. |
 | `class` | `string` | `''` | No | Extra Tailwind classes for local composition. |
 | `...attributes` | HTML attributes | none | No | Any other attributes are forwarded to the rendered element. |

@@ -1,0 +1,65 @@
+---
+import Icon from './Icon.astro';
+import type { IconName } from '../lib/icon-names';
+
+interface Props {
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  variant?: 'primary' | 'secondary' | 'tertiary';
+  tone?: 'default' | 'light';
+  size?: 'default' | 'large';
+  icon?: boolean | IconName;
+  fullWidth?: boolean | 'true' | 'false';
+  target?: string;
+  rel?: string;
+  class?: string;
+}
+
+const {
+  href,
+  type = 'button',
+  variant = 'primary',
+  tone = 'default',
+  size = 'default',
+  icon = false,
+  fullWidth = false,
+  target,
+  rel,
+  class: className = '',
+} = Astro.props;
+
+const baseClass = 'type-button inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-button border transition-[border-color,background-color,color,box-shadow] duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]';
+const gapClass = variant === 'tertiary' ? 'gap-1' : 'gap-2';
+const sizeClass = size === 'large'
+  ? variant === 'tertiary'
+    ? 'h-button-large'
+    : 'h-button-large min-w-[220px] px-8'
+  : variant === 'tertiary'
+    ? 'h-button-default'
+    : 'h-button-default min-w-[160px] px-6';
+const variantClass =
+  tone === 'light' && variant === 'primary'
+    ? 'border-white bg-white text-[var(--brand-strong)] hover:bg-[var(--accent-soft)]'
+    : tone === 'light' && variant === 'secondary'
+      ? 'border-white/60 bg-transparent text-white hover:border-white hover:bg-white hover:text-[var(--brand-strong)]'
+      : variant === 'primary'
+        ? 'border-[var(--brand-strong)] bg-[var(--brand-strong)] text-white shadow-sm hover:border-[var(--accent-strong)] hover:bg-[var(--accent-strong)]'
+        : variant === 'secondary'
+          ? 'border-[var(--line)] bg-white text-[var(--brand-strong)] hover:border-[var(--accent)] hover:text-[var(--accent-strong)]'
+          : 'min-w-0 border-0 bg-transparent px-0 text-[var(--brand-strong)] hover:text-[var(--accent-strong)]';
+const widthClass = fullWidth === true || fullWidth === 'true' ? 'flex w-full' : '';
+const iconSize = variant === 'tertiary' ? 'compact' : 'default';
+const iconName = icon === true ? 'move-right' : icon || undefined;
+---
+
+{href ? (
+  <a href={href} target={target} rel={rel} class:list={[baseClass, gapClass, sizeClass, variantClass, widthClass, className]}>
+    <slot />
+    {iconName && <Icon name={iconName} size={iconSize} />}
+  </a>
+) : (
+  <button type={type} class:list={[baseClass, gapClass, sizeClass, variantClass, widthClass, className]}>
+    <slot />
+    {iconName && <Icon name={iconName} size={iconSize} />}
+  </button>
+)}

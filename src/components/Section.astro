@@ -1,0 +1,62 @@
+---
+interface Props {
+  id?: string;
+  shell?: boolean;
+  disableXPadding?: boolean;
+  border?: boolean;
+  borderTop?: boolean;
+  borderBottom?: boolean;
+  background?: 'transparent' | 'white' | 'paper' | 'dark';
+  top?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+  bottom?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+}
+
+const {
+  id,
+  shell = true,
+  disableXPadding = false,
+  border = false,
+  borderTop = false,
+  borderBottom = false,
+  background = 'transparent',
+  top = 'md',
+  bottom = 'none',
+} = Astro.props;
+
+const topSpacing = {
+  none: '',
+  sm: 'pt-4 sm:pt-6',
+  md: 'pt-8 sm:pt-10',
+  lg: 'pt-12 sm:pt-16',
+  xl: 'pt-16 sm:pt-24',
+};
+
+const bottomSpacing = {
+  none: '',
+  sm: 'pb-4 sm:pb-6',
+  md: 'pb-8 sm:pb-10',
+  lg: 'pb-12 sm:pb-16',
+  xl: 'pb-16 sm:pb-24',
+};
+
+const backgroundClass = {
+  transparent: '',
+  white: 'bg-white',
+  paper: 'bg-[var(--paper)]',
+  dark: 'bg-[var(--brand-strong)] text-white',
+};
+
+const borderClasses: string[] = [];
+if (border) borderClasses.push('border-y border-[var(--line)]');
+if (borderTop) borderClasses.push('border-t border-[var(--line)]');
+if (borderBottom) borderClasses.push('border-b border-[var(--line)]');
+
+const shellClass = shell ? 'mx-auto w-full max-w-7xl' : '';
+const padXClass = disableXPadding ? '' : 'px-5 sm:px-8';
+---
+
+<section id={id} class:list={['scroll-mt-20', backgroundClass[background], borderClasses]}>
+  <div class:list={[shellClass, padXClass, topSpacing[top], bottomSpacing[bottom]]}>
+    <slot />
+  </div>
+</section>

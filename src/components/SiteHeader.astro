@@ -1,0 +1,32 @@
+---
+import Button from './Button.astro';
+
+const navItems = [
+  { href: '#components', label: 'Components' },
+  { href: '#standards', label: 'Standards' },
+  { href: '#verification', label: 'Verification' },
+];
+---
+
+<header class="sticky top-0 z-50 border-b border-[var(--line)] bg-white/95 backdrop-blur-xl">
+  <div class="shell flex min-h-20 items-center justify-between gap-5 py-4">
+    <a href="/" aria-label="Go to homepage" class="flex flex-col leading-none text-[var(--ink)]">
+      <span class="font-serif text-3xl font-medium">Astro Boilerplate</span>
+      <span class="mt-1 text-[0.68rem] font-bold uppercase text-[var(--accent-strong)]">Reusable WildPress build system</span>
+    </a>
+
+    <div class="hidden items-center gap-7 md:flex">
+      <nav class="flex items-center gap-7" aria-label="Primary">
+        {navItems.map((item) => (
+          <a
+            href={item.href}
+            class="border-b border-transparent pb-1 text-sm font-bold text-[var(--ink-2)] transition hover:border-[var(--accent)] hover:text-[var(--ink)]"
+          >
+            {item.label}
+          </a>
+        ))}
+      </nav>
+      <Button href="#verification" icon={true}>Verify</Button>
+    </div>
+  </div>
+</header>

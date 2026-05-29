@@ -1,0 +1,26 @@
+---
+interface Props {
+  as?: keyof HTMLElementTagNameMap;
+  variant?: 'display' | 'heading' | 'title' | 'body' | 'meta' | 'label';
+  class?: string;
+}
+
+const {
+  as: Tag = 'p',
+  variant = 'body',
+  class: className = '',
+} = Astro.props;
+
+const classes = {
+  display: 'type-display',
+  heading: 'type-heading',
+  title: 'type-title',
+  body: 'type-body',
+  meta: 'type-meta',
+  label: 'type-label',
+};
+---
+
+<Tag class:list={[classes[variant], className]}>
+  <slot />
+</Tag>

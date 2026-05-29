@@ -1,0 +1,26 @@
+---
+import { Image } from 'astro:assets';
+import type { LocalImageProps, RemoteImageProps } from 'astro:assets';
+
+type Props = (LocalImageProps | RemoteImageProps) & {
+  class?: string;
+};
+
+const {
+  format = 'webp',
+  quality = 'high',
+  loading = 'lazy',
+  decoding = 'async',
+  class: className = '',
+  ...attributes
+} = Astro.props as Props;
+---
+
+<Image
+  {...attributes}
+  format={format}
+  quality={quality}
+  loading={loading}
+  decoding={decoding}
+  class={className}
+/>

@@ -123,6 +123,10 @@ for (const absolutePath of files) {
   if (file !== 'scripts/verify-standards.mjs' && /\bReact\b|from ['"]react['"]|from ['"]react-dom/.test(content)) {
     fail(file, 'React imports are not part of the default boilerplate; use Preact islands or document an opt-in');
   }
+
+  if (extension === '.astro' && file !== 'src/components/OptimizedImage.astro' && /<img(?:\s|>)/i.test(content)) {
+    fail(file, 'raw img elements are not allowed; use OptimizedImage.astro or astro:assets Image/Picture');
+  }
 }
 
 if (failures.length > 0) {

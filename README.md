@@ -1,6 +1,6 @@
 # Astro Boilerplate
 
-Strict Astro starter for new static site builds. It combines reusable primitives from the West End, Battersea Property Guide, and Catelier projects with a verification process designed to prevent drift.
+Strict Astro starter for new static site builds. It combines reusable primitives with a verification process designed to prevent drift across new Astro projects.
 
 ## Stack
 
@@ -13,6 +13,7 @@ Strict Astro starter for new static site builds. It combines reusable primitives
 - Pagefind for static search indexing
 - Sitemap integration
 - Fontsource for local font loading
+- Astro native image optimization through `astro:assets`
 
 React is intentionally not part of the default stack. Add it only for a project that has a clear React-only requirement.
 
@@ -43,6 +44,7 @@ Reusable components live in `src/components/`.
 - `Typography.astro` for display, heading, title, body, meta, and label text.
 - `Icon.astro` for approved Lucide icons.
 - `SiteHeader.astro` and `Footer.astro` are replaceable project shells.
+- `OptimizedImage.astro` wraps Astro's native `<Image />` and defaults to `format="webp"` and `quality="high"`.
 
 Rules:
 
@@ -50,11 +52,12 @@ Rules:
 - No component-scoped `<style>` blocks.
 - No inline `style` attributes.
 - No CSS files outside `src/styles/global.css`.
+- No raw `<img>` elements in Astro files. Use `OptimizedImage.astro`, or Astro's native `Image`/`Picture` components for documented exceptions.
 - Use `class:list` for conditional Astro classes.
 - Avoid template-generated class strings.
 - Keep component APIs narrow and reusable.
 
-Full component options, goals, examples, and modification rules live in `docs/components.md`. Read that file before changing shared primitives.
+Full component options, goals, attributes, and examples live in `docs/components.md` and the per-component files under `docs/components/`.
 
 ## Global CSS Policy
 
@@ -67,15 +70,6 @@ Full component options, goals, examples, and modification rules live in `docs/co
 - Shared primitives such as `.shell`, `.card`, `.type-*`, `.field`, and `.eyebrow`
 
 Do not place one-off page styling in global CSS. Use Tailwind classes in the page or component.
-
-## Dependency Guardrails
-
-`scripts/verify-standards.mjs` enforces the approved dependency allowlist. If a new project needs another dependency, make the decision explicit:
-
-1. Add the package.
-2. Document why it belongs in README.
-3. Add it to the allowlist in `scripts/verify-standards.mjs`.
-4. Run `npm run validate`.
 
 ## Creating A New Site From This Boilerplate
 
@@ -90,7 +84,6 @@ Do not place one-off page styling in global CSS. Use Tailwind classes in the pag
 Before shipping any build:
 
 - `npm run validate` passes.
-- There are no unapproved dependencies.
 - There are no component `<style>` blocks or inline styles.
 - Global CSS contains only tokens, base rules, and shared primitives.
 - Components use Tailwind classes and stable responsive dimensions.

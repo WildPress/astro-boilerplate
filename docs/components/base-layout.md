@@ -16,6 +16,7 @@ Use `BaseLayout` for every page route unless the route is a deliberately isolate
 | --- | --- | --- | --- | --- |
 | `title` | `string` | none | Yes | Sets the browser title, Open Graph title, and Twitter title. |
 | `description` | `string` | none | Yes | Sets the meta description, Open Graph description, and Twitter description. |
+| `canonicalUrl` | `string \| URL` | current path on `Astro.site` | No | Overrides the generated canonical URL and Open Graph URL for deliberate duplicate-content cases. |
 | `noindex` | `boolean` | `false` | No | Adds `noindex, nofollow` robots metadata for private, temporary, or utility pages. |
 | `hideFooter` | `boolean` | `false` | No | Removes the shared footer. Use for full-screen maps, focused tools, or conversion flows. |
 
@@ -31,6 +32,7 @@ Use `BaseLayout` for every page route unless the route is a deliberately isolate
 - Import `src/styles/global.css` here and nowhere else.
 - Keep font preloads aligned with imported Fontsource files.
 - Keep analytics, consent scripts, and structured data deliberate and project-specific.
+- Keep `site` in `astro.config.mjs` set to the canonical public origin because `BaseLayout` uses it for canonical and Open Graph URLs.
 - Do not add page-specific layout rules to `BaseLayout`.
 
 ## Example

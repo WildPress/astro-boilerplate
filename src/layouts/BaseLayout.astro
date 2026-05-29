@@ -6,6 +6,7 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description: string;
+  canonicalUrl?: string | URL;
   noindex?: boolean;
   hideFooter?: boolean;
 }
@@ -13,9 +14,12 @@ interface Props {
 const {
   title,
   description,
+  canonicalUrl,
   noindex = false,
   hideFooter = false,
 } = Astro.props;
+
+const canonicalHref = new URL(canonicalUrl ?? Astro.url.pathname, Astro.site ?? Astro.url.origin).toString();
 ---
 
 <!doctype html>
@@ -26,11 +30,12 @@ const {
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <link rel="canonical" href={canonicalHref} />
     <meta name="description" content={description} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={Astro.url.href} />
+    <meta property="og:url" content={canonicalHref} />
     <meta name="twitter:card" content="summary_large_image" />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <slot name="head" />

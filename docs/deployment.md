@@ -73,6 +73,24 @@ By default, `INDEXNOW_MODE=changed-urls` submits changed, added, and deleted pag
 5. Run `npm run validate`.
 6. Run `npm run deploy:bunny` only from the real project repo.
 
+## Canonical Host
+
+Choose one public origin for the project before launch:
+
+- Apex canonical: `https://example.com`
+- `www` canonical: `https://www.example.com`
+
+Set `site` in `astro.config.mjs` to that exact origin. Astro uses it for generated sitemap URLs, and `BaseLayout` uses it for canonical and Open Graph URLs.
+
+Redirect alternate hostnames at the hosting or CDN layer with a permanent redirect. For Bunny-backed projects, configure this in Bunny Edge Rules with a hostname condition and a Redirect To URL action that preserves the request path.
+
+Examples:
+
+- If `https://www.example.com` is canonical, redirect `example.com/*` to `https://www.example.com/*`.
+- If `https://example.com` is canonical, redirect `www.example.com/*` to `https://example.com/*`.
+
+Do not try to solve host canonicalisation inside Astro pages. A static build can emit canonical metadata, but it cannot issue host-level redirects once Bunny is serving the files.
+
 ## GitHub Actions
 
 `.github/workflows/deploy-bunny.yml` runs the same `npm run deploy:bunny` script through a manual `workflow_dispatch` trigger.

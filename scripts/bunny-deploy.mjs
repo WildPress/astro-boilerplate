@@ -17,9 +17,13 @@
  *   BUNNY_CLEAN_DEPLOY       Set to "true" to delete ALL remote files before uploading.
  *                            Guarantees a clean slate, useful when CDN purge is not
  *                            yet wired up and you need to be sure old files are gone.
+ *   INDEXNOW_KEY             IndexNow API key. When set, the key file is written to
+ *                            dist/ and changed page URLs are submitted after upload.
+ *   INDEXNOW_ENDPOINT        Submission endpoint. Defaults to https://api.indexnow.org/indexnow.
+ *   INDEXNOW_MODE            "changed-urls" (default) or "all".
  */
 
-import { existsSync, readFileSync, readdirSync } from 'fs';
+import { existsSync, readFileSync, readdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
 const ENDPOINT = process.env.BUNNY_STORAGE_ENDPOINT;
@@ -29,10 +33,14 @@ const API_KEY = process.env.BUNNY_API_KEY;
 const PULL_ZONE_ID = process.env.BUNNY_PULL_ZONE_ID;
 const PURGE_MODE = process.env.BUNNY_PURGE_MODE || 'full';
 const CLEAN_DEPLOY = process.env.BUNNY_CLEAN_DEPLOY === 'true';
+const INDEXNOW_KEY = process.env.INDEXNOW_KEY?.trim() || '';
+const INDEXNOW_ENDPOINT = process.env.INDEXNOW_ENDPOINT || 'https://api.indexnow.org/indexnow';
+const INDEXNOW_MODE = process.env.INDEXNOW_MODE || 'changed-urls';
 const DIST = 'dist';
 const STORAGE_CONCURRENCY = 20;
 const PURGE_CONCURRENCY = 1;
 const PURGE_MAX_RETRIES = 5;
+const INDEXNOW_MAX_URLS = 10000;
 
 if (!ENDPOINT || !ZONE || !KEY) {
   console.error('Missing required env vars: BUNNY_STORAGE_ENDPOINT, BUNNY_STORAGE_ZONE_NAME, BUNNY_STORAGE_ACCESS_KEY');
@@ -52,6 +60,27 @@ if (ZONE.includes('/')) {
 if (!existsSync(DIST)) {
   console.error(`Missing ${DIST}/. Run the build before deploying.`);
   process.exit(1);
+}
+
+if (INDEXNOW_KEY && !/^[a-zA-Z0-9-]{8,128}$/.test(INDEXNOW_KEY)) {
+  console.error('Invalid INDEXNOW_KEY. Use 8 to 128 letters, numbers, or dashes.');
+  process.exit(1);
+}
+
+if (!['changed-urls', 'all'].includes(INDEXNOW_MODE)) {
+  console.error('Invalid INDEXNOW_MODE. Use "changed-urls" or "all".');
+  process.exit(1);
+}
+
+try {
+  new URL(INDEXNOW_ENDPOINT);
+} catch {
+  console.error('Invalid INDEXNOW_ENDPOINT. Use an absolute URL like https://api.indexnow.org/indexnow.');
+  process.exit(1);
+}
+
+if (INDEXNOW_KEY) {
+  writeFileSync(join(DIST, `${INDEXNOW_KEY}.txt`), INDEXNOW_KEY);
 }
 
 const baseUrl = `https://${ENDPOINT}/${ZONE}`;
@@ -172,6 +201,16 @@ function toPublicPath(relativePath) {
   return `/${relativePath}`;
 }
 
+function toIndexNowPath(relativePath) {
+  if (relativePath === 'index.html') return '/';
+  if (relativePath.endsWith('/index.html')) {
+    return `/${relativePath.slice(0, -'index.html'.length)}`;
+  }
+  if (relativePath.endsWith('.html')) return `/${relativePath}`;
+
+  return null;
+}
+
 function parseExtraPurgeUrls() {
   const raw = process.env.BUNNY_PURGE_URLS || '';
   return raw
@@ -215,6 +254,71 @@ async function getChangedPublicUrls(localFiles, remoteFiles) {
   });
 
   return changedUrls;
+}
+
+function getIndexNowUrls(localFiles, changedPublicUrls = new Set()) {
+  const urls = new Set();
+
+  if (INDEXNOW_MODE === 'all') {
+    for (const file of localFiles) {
+      const publicPath = toIndexNowPath(file);
+      if (!publicPath) continue;
+      urls.add(new URL(publicPath, `${publicBaseUrl}/`).toString());
+    }
+
+    return [...urls].sort();
+  }
+
+  for (const url of changedPublicUrls) {
+    try {
+      const parsed = new URL(url);
+      if (parsed.origin !== new URL(publicBaseUrl).origin) continue;
+      if (parsed.pathname.endsWith('/') || parsed.pathname.endsWith('.html')) {
+        urls.add(parsed.toString());
+      }
+    } catch {
+      // Ignore invalid URLs collected from optional user-provided purge lists.
+    }
+  }
+
+  return [...urls].sort();
+}
+
+async function submitIndexNow(urls) {
+  if (!INDEXNOW_KEY) {
+    console.log('INDEXNOW_KEY not set; skipping IndexNow submission.');
+    return;
+  }
+
+  if (urls.length === 0) {
+    console.log('No page URLs detected for IndexNow submission.');
+    return;
+  }
+
+  if (urls.length > INDEXNOW_MAX_URLS) {
+    console.error(`IndexNow supports up to ${INDEXNOW_MAX_URLS} URLs per request. Current submission has ${urls.length}.`);
+    process.exit(1);
+  }
+
+  const { hostname } = new URL(publicBaseUrl);
+  const keyLocation = new URL(`/${INDEXNOW_KEY}.txt`, `${publicBaseUrl}/`).toString();
+  const res = await fetch(INDEXNOW_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    body: JSON.stringify({
+      host: hostname,
+      key: INDEXNOW_KEY,
+      keyLocation,
+      urlList: urls,
+    }),
+  });
+
+  if (![200, 202].includes(res.status)) {
+    const message = await res.text();
+    throw new Error(`IndexNow submission failed: HTTP ${res.status}${message ? ` ${message}` : ''}`);
+  }
+
+  console.log(`Submitted ${urls.length} URL(s) to IndexNow.`);
 }
 
 async function purgeUrl(url) {
@@ -290,6 +394,28 @@ const localFiles = walkLocal(DIST).filter(
 );
 console.log('Fetching current remote file list...');
 const remoteFiles = await listRemote();
+const needsPublicBaseUrl = INDEXNOW_KEY || (API_KEY && PURGE_MODE !== 'full');
+let changedPublicUrls = new Set();
+
+if (needsPublicBaseUrl) {
+  const siteUrl = await getSiteUrl();
+
+  if (!siteUrl) {
+    console.error('Missing public base URL. Set BUNNY_PUBLIC_BASE_URL or define site in astro.config.mjs.');
+    process.exit(1);
+  }
+
+  try {
+    publicBaseUrl = normalizePublicBaseUrl(siteUrl);
+  } catch (error) {
+    console.error(error.message);
+    process.exit(1);
+  }
+
+  if (INDEXNOW_KEY || PURGE_MODE !== 'full') {
+    changedPublicUrls = await getChangedPublicUrls(localFiles, remoteFiles);
+  }
+}
 
 if (CLEAN_DEPLOY && remoteFiles.length > 0) {
   console.log(`Clean deploy: deleting all ${remoteFiles.length} remote file(s) before upload...`);
@@ -301,6 +427,14 @@ if (CLEAN_DEPLOY && remoteFiles.length > 0) {
 
 const localSet = new Set(localFiles);
 const toDelete = CLEAN_DEPLOY ? [] : remoteFiles.filter((file) => !localSet.has(file));
+
+if (needsPublicBaseUrl) {
+  for (const file of toDelete) {
+    const publicPath = toPublicPath(file);
+    if (!publicPath) continue;
+    changedPublicUrls.add(new URL(publicPath, `${publicBaseUrl}/`).toString());
+  }
+}
 
 console.log(`Uploading ${localFiles.length} files...`);
 await batch(localFiles, async (file) => {
@@ -332,41 +466,22 @@ if (!API_KEY) {
   await purgePullZone(PULL_ZONE_ID);
   console.log(`  PURGE FULL ${PULL_ZONE_ID}`);
 } else {
-  const siteUrl = await getSiteUrl();
-
-  if (!siteUrl) {
-    console.error('Missing public base URL. Set BUNNY_PUBLIC_BASE_URL or define site in astro.config.mjs.');
-    process.exit(1);
-  }
-
-  try {
-    publicBaseUrl = normalizePublicBaseUrl(siteUrl);
-  } catch (error) {
-    console.error(error.message);
-    process.exit(1);
-  }
-
-  const changedPublicUrls = await getChangedPublicUrls(localFiles, remoteFiles);
-
-  for (const file of toDelete) {
-    const publicPath = toPublicPath(file);
-    if (!publicPath) continue;
-    changedPublicUrls.add(new URL(publicPath, `${publicBaseUrl}/`).toString());
-  }
-
   const purgeUrls = [...new Set([...getPurgeUrls([]), ...changedPublicUrls])].sort();
 
   if (purgeUrls.length === 0) {
     console.log('No stable URLs detected for purge.');
-    console.log('Done.');
-    process.exit(0);
+  } else {
+    console.log(`Purging ${purgeUrls.length} URL(s) from Bunny CDN...`);
+    await batch(purgeUrls, async (url) => {
+      await purgeUrl(url);
+      console.log(`  PURGE ${url}`);
+    }, PURGE_CONCURRENCY);
   }
+}
 
-  console.log(`Purging ${purgeUrls.length} URL(s) from Bunny CDN...`);
-  await batch(purgeUrls, async (url) => {
-    await purgeUrl(url);
-    console.log(`  PURGE ${url}`);
-  }, PURGE_CONCURRENCY);
+if (INDEXNOW_KEY) {
+  const indexNowUrls = getIndexNowUrls(localFiles, changedPublicUrls);
+  await submitIndexNow(indexNowUrls);
 }
 
 console.log('Done.');

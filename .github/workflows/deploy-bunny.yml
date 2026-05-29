@@ -25,3 +25,6 @@ jobs:
           BUNNY_PUBLIC_BASE_URL: ${{ vars.BUNNY_PUBLIC_BASE_URL }}
           BUNNY_PURGE_URLS: ${{ vars.BUNNY_PURGE_URLS }}
           BUNNY_CLEAN_DEPLOY: ${{ vars.BUNNY_CLEAN_DEPLOY || 'false' }}
+          INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+          INDEXNOW_ENDPOINT: ${{ vars.INDEXNOW_ENDPOINT || 'https://api.indexnow.org/indexnow' }}
+          INDEXNOW_MODE: ${{ vars.INDEXNOW_MODE || 'changed-urls' }}

@@ -12,7 +12,7 @@ A strict starter for new Astro static sites. It includes a small set of reusable
 - Pagefind search indexing after build
 - Sitemap generation
 - ESLint and project standards verification
-- Optional Bunny.net deployment script
+- Optional Bunny.net deployment script with IndexNow support
 
 ## Getting Started
 
